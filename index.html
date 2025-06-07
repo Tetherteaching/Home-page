@@ -1,0 +1,980 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tether Teaching - Crypto Education Platform</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: #0a1421;
+            color: white;
+            overflow-x: hidden;
+        }
+
+        /* Header Styles */
+        .header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(10, 20, 33, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            padding: 15px 0;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 40px;
+        }
+
+        .nav-menu a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+            position: relative;
+        }
+
+        .nav-menu a:hover {
+            color: #1dd1a1;
+        }
+
+        .nav-menu a.active {
+            color: #1dd1a1;
+        }
+
+        .nav-menu a.active::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: #1dd1a1;
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .social-icons a {
+            width: 35px;
+            height: 35px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .social-icons a:hover {
+            background: #1dd1a1;
+            transform: translateY(-2px);
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-top: 80px;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #0a1421 0%, #1e3a5f 50%, #2d5a87 100%);
+            position: relative;
+        }
+
+        .hero-section {
+            padding: 80px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+            min-height: calc(100vh - 80px);
+        }
+
+        .hero-content h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 30px;
+            background: linear-gradient(135deg, #1dd1a1, #55efc4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-description {
+            font-size: 1.1rem;
+            line-height: 1.7;
+            margin-bottom: 40px;
+            color: #b8c6db;
+        }
+
+        .features-list {
+            margin-bottom: 40px;
+            color: #b8c6db;
+        }
+
+        .features-list h3 {
+            color: #1dd1a1;
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+        }
+
+        .features-list ul {
+            list-style: none;
+            space-y: 8px;
+        }
+
+        .features-list li {
+            margin-bottom: 8px;
+            padding-left: 15px;
+            position: relative;
+        }
+
+        .features-list li::before {
+            content: '•';
+            color: #1dd1a1;
+            position: absolute;
+            left: 0;
+        }
+
+        .contract-info {
+            background: rgba(29, 209, 161, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            border-left: 4px solid #1dd1a1;
+        }
+
+        .contract-info h4 {
+            color: #1dd1a1;
+            margin-bottom: 10px;
+        }
+
+        .contract-address {
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            color: #b8c6db;
+            word-break: break-all;
+        }
+
+        /* Buy Button Section */
+        .buy-section {
+            padding: 60px 20px;
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .buy-section h3 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #1dd1a1, #55efc4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .buy-section p {
+            font-size: 1.1rem;
+            color: #b8c6db;
+            margin-bottom: 40px;
+            line-height: 1.6;
+        }
+
+        .buy-button {
+            background: linear-gradient(135deg, #1dd1a1, #10ac84);
+            color: white;
+            padding: 20px 50px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .buy-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .buy-button:hover::before {
+            left: 100%;
+        }
+
+        .buy-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 35px rgba(29, 209, 161, 0.4);
+        }
+
+        .hero-visual {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .tether-logo {
+            width: 300px;
+            height: 300px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            box-shadow: 0 20px 60px rgba(29, 209, 161, 0.3);
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .tether-symbol {
+            font-size: 8rem;
+            font-weight: bold;
+            color: white;
+            text-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+        }
+
+        .floating-elements {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+        }
+
+        .floating-element {
+            position: absolute;
+            background: rgba(29, 209, 161, 0.1);
+            border-radius: 50%;
+            animation: float 4s ease-in-out infinite;
+        }
+
+        .floating-element:nth-child(1) {
+            width: 60px;
+            height: 60px;
+            top: 10%;
+            left: 10%;
+            animation-delay: -1s;
+        }
+
+        .floating-element:nth-child(2) {
+            width: 40px;
+            height: 40px;
+            top: 70%;
+            right: 10%;
+            animation-delay: -2s;
+        }
+
+        .floating-element:nth-child(3) {
+            width: 30px;
+            height: 30px;
+            bottom: 20%;
+            left: 20%;
+            animation-delay: -0.5s;
+        }
+
+        /* Pricing Section Styles */
+        .pricing-section {
+            padding: 100px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 20px;
+            margin-top: 50px;
+            backdrop-filter: blur(10px);
+        }
+
+        .pricing-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .pricing-header h2 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #1dd1a1, #55efc4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .pricing-header p {
+            font-size: 1.1rem;
+            color: #b8c6db;
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .pricing-card {
+            border-radius: 20px;
+            padding: 40px 30px;
+            text-align: center;
+            position: relative;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        /* Unique styles for each phase */
+        .pricing-card.phase-1 {
+            background: linear-gradient(135deg, rgba(29, 209, 161, 0.15), rgba(85, 239, 196, 0.1));
+            border: 2px solid #1dd1a1;
+            box-shadow: 0 0 30px rgba(29, 209, 161, 0.3);
+        }
+
+        .pricing-card.phase-2 {
+            background: linear-gradient(135deg, rgba(255, 107, 107, 0.15), rgba(255, 159, 67, 0.1));
+            border: 2px solid #b4ff06;
+            box-shadow: 0 0 20px rgba(255, 107, 107, 0.2);
+            color: #09fcf8;
+        }
+
+        .pricing-card.phase-3 {
+            background: linear-gradient(135deg, rgba(116, 185, 255, 0.15), rgba(162, 155, 254, 0.1));
+            border: 2px solid #74b9ff;
+            box-shadow: 0 0 20px rgba(116, 185, 255, 0.2);
+        }
+
+        .pricing-card.phase-4 {
+            background: linear-gradient(135deg, rgba(253, 203, 110, 0.15), rgba(255, 165, 2, 0.1));
+            border: 2px solid #fdcb6e;
+            box-shadow: 0 0 20px rgba(253, 203, 110, 0.2);
+        }
+
+        .pricing-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .pricing-card.phase-1:hover {
+            box-shadow: 0 20px 40px rgba(29, 209, 161, 0.4);
+            border-color: #00cec9;
+        }
+
+        .pricing-card.phase-2:hover {
+            box-shadow: 0 20px 40px rgba(255, 107, 107, 0.4);
+            border-color: #e84393;
+        }
+
+        .pricing-card.phase-3:hover {
+            box-shadow: 0 20px 40px rgba(116, 185, 255, 0.4);
+            border-color: #a29bfe;
+        }
+
+        .pricing-card.phase-4:hover {
+            box-shadow: 0 20px 40px rgba(253, 203, 110, 0.4);
+            border-color: #f39c12;
+        }
+
+        .pricing-card.featured {
+            border: 2px solid #1dd1a1;
+            transform: scale(1.05);
+        }
+
+        .pricing-card.featured::before {
+            content: 'EARLY BIRD';
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, #1dd1a1, #10ac84);
+            color: white;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+
+        .phase-number {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        /* Unique phase number colors */
+        .phase-1 .phase-number {
+            color: #1dd1a1;
+        }
+
+        .phase-2 .phase-number {
+            color: #73ff00;
+        }
+
+        .phase-3 .phase-number {
+            color: #74b9ff;
+        }
+
+        .phase-4 .phase-number {
+            color: #fdcb6e;
+        }
+
+        .phase-name {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 20px;
+        }
+
+        .phase-price {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 10px;
+        }
+
+        /* Unique price colors for each phase */
+        .phase-1 .phase-price {
+            color: #1dd1a1;
+        }
+
+        .phase-2 .phase-price {
+            color: #4ef501;
+        }
+
+        .phase-3 .phase-price {
+            color: #74b9ff;
+        }
+
+        .phase-4 .phase-price {
+            color: #fdcb6e;
+        }
+
+        .phase-price .currency {
+            font-size: 1.5rem;
+            vertical-align: top;
+        }
+
+        .phase-duration {
+            color: #b8c6db;
+            font-size: 1rem;
+            margin-bottom: 30px;
+            padding: 10px 20px;
+            background: rgba(29, 209, 161, 0.1);
+            border-radius: 25px;
+            display: inline-block;
+        }
+
+        .phase-features {
+            list-style: none;
+            margin-bottom: 30px;
+        }
+
+        .phase-features li {
+            color: #b8c6db;
+            margin-bottom: 8px;
+            padding-left: 15px;
+            position: relative;
+        }
+
+        .phase-features li::before {
+            font-weight: bold;
+        }
+
+        /* Unique checkmark colors for each phase */
+        .phase-1 .phase-features li::before {
+            content: '✓';
+            color: #1dd1a1;
+            position: absolute;
+            left: 0;
+        }
+
+        .phase-2 .phase-features li::before {
+            content: '✓';
+            color: #93ff06;
+            position: absolute;
+            left: 0;
+        }
+
+        .phase-3 .phase-features li::before {
+            content: '✓';
+            color: #74b9ff;
+            position: absolute;
+            left: 0;
+        }
+
+        .phase-4 .phase-features li::before {
+            content: '✓';
+            color: #fdcb6e;
+            position: absolute;
+            left: 0;
+        }
+
+        .current-phase {
+            background: linear-gradient(135deg, #1dd1a1, #10ac84);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 20px;
+            display: inline-block;
+        }
+
+        .wix-button {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 60px;
+            height: 60px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        .wix-button:hover {
+            transform: scale(1.1);
+        }
+
+        .wix-button span {
+            color: #1dd1a1;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .wix-tooltip {
+            position: absolute;
+            bottom: 70px;
+            right: 0;
+            background: rgba(0, 0, 0, 0.9);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 5px;
+            font-size: 0.9rem;
+            white-space: nowrap;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: all 0.3s ease;
+        }
+
+        .wix-button:hover .wix-tooltip {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            #logo-IMG {
+                top: 20px;
+                width: 180px;
+            }
+            
+            .tether-logo {
+                margin-top: 20px;
+            }
+            
+            .nav-menu {
+                display: none;
+            }
+
+            .hero-section {
+                grid-template-columns: 1fr;
+                gap: 40px;
+                text-align: center;
+                padding: 40px 20px;
+            }
+
+            .hero-content h1 {
+                font-size: 2.5rem;
+            }
+
+            .tether-logo {
+                width: 200px;
+                height: 200px;
+            }
+
+            .tether-symbol {
+                font-size: 5rem;
+            }
+
+            .social-icons {
+                display: none;
+            }
+
+            .pricing-section {
+                padding: 60px 20px;
+            }
+
+            .pricing-header h2 {
+                font-size: 2rem;
+            }
+
+            .pricing-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .pricing-card.featured {
+                transform: none;
+            }
+
+            .phase-price {
+                font-size: 2.5rem;
+            }
+        }
+
+        /* Background Animation */
+        .bg-animation {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: -1;
+        }
+
+        .bg-circle {
+            position: absolute;
+            border-radius: 50%;
+            background: linear-gradient(135deg, rgba(29, 209, 161, 0.1), rgba(85, 239, 196, 0.05));
+            animation: bgFloat 8s ease-in-out infinite;
+        }
+
+        .bg-circle:nth-child(1) {
+            width: 300px;
+            height: 300px;
+            top: 10%;
+            left: -10%;
+            animation-delay: 0s;
+        }
+
+        .bg-circle:nth-child(2) {
+            width: 200px;
+            height: 200px;
+            top: 60%;
+            right: -5%;
+            animation-delay: -3s;
+        }
+
+        .bg-circle:nth-child(3) {
+            width: 150px;
+            height: 150px;
+            bottom: 20%;
+            left: 50%;
+            animation-delay: -6s;
+        }
+
+        @keyframes bgFloat {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            25% { transform: translate(20px, -20px) rotate(90deg); }
+            50% { transform: translate(-20px, 20px) rotate(180deg); }
+            75% { transform: translate(20px, 20px) rotate(270deg); }
+        }
+
+        #logo-IMG{
+            position:relative;
+            top: 40px;
+            width: 400px;
+        }
+
+        #first-logo{
+            position: relative;
+            top: 5px;
+        }
+
+        #text-tether{
+            position: relative;
+            left:20px;
+        }
+        
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="nav-container">
+            <div class="logo">
+                <div class="logo-icon"><img src="logo.png" width="60px" height="50px" id="first-logo"></div>
+                <span id="text-tether">Tether Teaching</span>
+            </div>
+            
+            <nav>
+                <ul class="nav-menu">
+                    <li><a href="#" class="active">Home</a></li>
+                    <li><a href="#pricing">Pricing</a></li>
+                    <li><a href="#">Services</a></li>
+                    <li><a href="#">Gallery</a></li>
+                    <li><a href="#">Contact</a></li>
+                </ul>
+            </nav>
+            
+            <div class="social-icons">
+                <a href="#" title="Facebook"><i class="fab fa-facebook-f"></i></a>
+                <a href="#" title="Twitter"><i class="fab fa-twitter"></i></a>
+                <a href="#" title="Instagram"><i class="fab fa-instagram"></i></a>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div class="bg-animation">
+            <div class="bg-circle"></div>
+            <div class="bg-circle"></div>
+            <div class="bg-circle"></div>
+        </div>
+
+        <section class="hero-section">
+            <div class="hero-content">
+                <h1>Tether Teaching</h1>
+                
+                <p class="hero-description">
+                    Tether Teaching (USDT) "Tether Teaching (USDT) is a community-driven crypto education initiative designed to make stablecoin awareness fun and accessible TON Blockchain. USDT combines the stability concept of the popular Tether stablecoin with interactive learning experiences, gamified education, and real-world utility. Holders gain access to simplified crypto education modules, participate in knowledge-based challenges, and earn rewards for completing financial literacy milestones. With its commitment to demystifying stablecoins through entertainment and practical application, Tether Teaching transforms complex financial concepts into engaging adventures for crypto newcomers and enthusiasts alike."
+                </p>
+                
+                <div class="features-list">
+                    <h3>Key Features:</h3>
+                    <ul>
+                        <li><strong>Stability:</strong> Pegged 1:1 with USD</li>
+                        <li><strong>Security:</strong> Audited reserves, blockchain transparency</li>
+                        <li><strong>Speed:</strong> Near-instant transactions</li>
+                        <li><strong>DeFi Integration:</strong> Compatible with major DeFi platforms</li>
+                    </ul>
+                </div>
+
+
+            </div>
+
+            <div class="hero-visual">
+                <div class="floating-elements">
+                    <div class="floating-element"></div>
+                    <div class="floating-element"></div>
+                    <div class="floating-element"></div>
+                </div>
+                
+                <div class="tether-logo">
+                    <div class="tether-symbol"><img id="logo-IMG" src="logo.png"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Pricing Section -->
+        <section class="pricing-section" id="pricing">
+            <div class="pricing-header">
+                <h2>Token Sale Phases</h2>
+                <p>Join our token sale and be part of the future of crypto education. Each phase offers unique opportunities with progressive pricing.</p>
+            </div>
+
+            <div class="pricing-grid">
+                <div class="pricing-card phase-1 featured">
+                    <div class="current-phase">Current Phase</div>
+                    <div class="phase-number">Phase 1</div>
+                    <div class="phase-name">Early Bird Sale</div>
+                    <div class="phase-price">
+                        <span class="currency">$</span>0.25
+                    </div>
+                    <div class="phase-duration">June - July 2025</div>
+                    <ul class="phase-features">
+                        <li>Lowest price available</li>
+                        <li>Maximum savings opportunity</li>
+                        <li>Early access to platform</li>
+                        <li>VIP community access</li>
+                    </ul>
+                </div>
+
+                <div class="pricing-card phase-2">
+                    <div class="phase-number">Phase 2</div>
+                    <div class="phase-name">Rapid Sale</div>
+                    <div class="phase-price">
+                        <span class="currency">$</span>0.35
+                    </div>
+                    <div class="phase-duration">July - Sept 2025</div>
+                    <ul class="phase-features">
+                        <li>40% increase from Phase 1</li>
+                        <li>Priority support access</li>
+                        <li>Educational content preview</li>
+                        <li>Community voting rights</li>
+                    </ul>
+                </div>
+
+                <div class="pricing-card phase-3">
+                    <div class="phase-number">Phase 3</div>
+                    <div class="phase-name">Extended Sale</div>
+                    <div class="phase-price">
+                        <span class="currency">$</span>0.50
+                    </div>
+                    <div class="phase-duration">Sept - Dec 2025</div>
+                    <ul class="phase-features">
+                        <li>100% increase from Phase 1</li>
+                        <li>Standard platform access</li>
+                        <li>Learning module access</li>
+                        <li>Regular community updates</li>
+                    </ul>
+                </div>
+
+                <div class="pricing-card phase-4">
+                    <div class="phase-number">Phase 4</div>
+                    <div class="phase-name">Final Sale</div>
+                    <div class="phase-price">
+                        <span class="currency">$</span>0.75
+                    </div>
+                    <div class="phase-duration">Dec 2025 - March 2026</div>
+                    <ul class="phase-features">
+                        <li>200% increase from Phase 1</li>
+                        <li>Last chance to buy</li>
+                        <li>Pre-launch preparation</li>
+                        <li>Final onboarding phase</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Buy Button Section -->
+            <div class="buy-section">
+                <h3>Ready to Join Tether Teaching?</h3>
+                <p>Don't miss out on this opportunity to be part of the future of crypto education. Start your journey with us today!</p>
+                <a href="https://tetherteaching.github.io/payment-page/" class="buy-button">BUY USDT NOW</a>
+            </div>
+        </section>
+    </main>
+
+    <!-- <div class="wix-button">
+        <span>W</span>
+        <div class="wix-tooltip">Create Yours</div>
+    </div> -->
+
+    <script>
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Header background opacity on scroll
+        window.addEventListener('scroll', function() {
+            const header = document.querySelector('.header');
+            const scrollTop = window.pageYOffset;
+            
+            if (scrollTop > 50) {
+                header.style.background = 'rgba(10, 20, 33, 0.98)';
+            } else {
+                header.style.background = 'rgba(10, 20, 33, 0.95)';
+            }
+        });
+
+        // Copy contract address on click (if contract info is added back)
+        const contractAddress = document.querySelector('.contract-address');
+        if (contractAddress) {
+            contractAddress.addEventListener('click', function() {
+                navigator.clipboard.writeText(this.textContent.trim()).then(() => {
+                    const originalText = this.textContent;
+                    this.textContent = 'Copied!';
+                    setTimeout(() => {
+                        this.textContent = originalText;
+                    }, 2000);
+                });
+            });
+        }
+
+        // Add parallax effect to floating elements
+        window.addEventListener('scroll', function() {
+            const scrolled = window.pageYOffset;
+            const parallaxElements = document.querySelectorAll('.floating-element');
+            
+            parallaxElements.forEach((element, index) => {
+                const speed = 0.5 + (index * 0.2);
+                element.style.transform = `translateY(${scrolled * speed}px)`;
+            });
+        });
+
+        // Pricing card animation on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver(function(entries) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.pricing-card').forEach(card => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(30px)';
+            card.style.transition = 'all 0.6s ease';
+            observer.observe(card);
+        });
+    </script>
+</body>
+</html>
