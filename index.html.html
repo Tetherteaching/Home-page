@@ -1,0 +1,980 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tether Teaching - Crypto Education Platform</title>
+    <link href="css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: #0a1421;
+            color: white;
+            overflow-x: hidden;
+        }
+
+        /* Header Styles */
+        .header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(10, 20, 33, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            padding: 15px 0;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 40px;
+        }
+
+        .nav-menu a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+            position: relative;
+        }
+
+        .nav-menu a:hover {
+            color: #1dd1a1;
+        }
+
+        .nav-menu a.active {
+            color: #1dd1a1;
+        }
+
+        .nav-menu a.active::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: #1dd1a1;
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .social-icons a {
+            width: 35px;
+            height: 35px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .social-icons a:hover {
+            background: #1dd1a1;
+            transform: translateY(-2px);
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-top: 80px;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #0a1421 0%, #1e3a5f 50%, #2d5a87 100%);
+            position: relative;
+        }
+
+        .hero-section {
+            padding: 80px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+            min-height: calc(100vh - 80px);
+        }
+
+        .hero-content h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 30px;
+            background: linear-gradient(135deg, #1dd1a1, #55efc4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-description {
+            font-size: 1.1rem;
+            line-height: 1.7;
+            margin-bottom: 40px;
+            color: #b8c6db;
+        }
+
+        .features-list {
+            margin-bottom: 40px;
+            color: #b8c6db;
+        }
+
+        .features-list h3 {
+            color: #1dd1a1;
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+        }
+
+        .features-list ul {
+            list-style: none;
+        }
+
+        .features-list li {
+            margin-bottom: 8px;
+            padding-left: 15px;
+            position: relative;
+        }
+
+        .features-list li::before {
+            content: '•';
+            color: #1dd1a1;
+            position: absolute;
+            left: 0;
+        }
+
+        .hero-visual {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .tether-logo {
+            width: 300px;
+            height: 300px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            box-shadow: 0 20px 60px rgba(29, 209, 161, 0.3);
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .tether-symbol {
+            font-size: 8rem;
+            font-weight: bold;
+            color: white;
+            text-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+        }
+
+        .floating-elements {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+        }
+
+        .floating-element {
+            position: absolute;
+            background: rgba(29, 209, 161, 0.1);
+            border-radius: 50%;
+            animation: float 4s ease-in-out infinite;
+        }
+
+        .floating-element:nth-child(1) {
+            width: 60px;
+            height: 60px;
+            top: 10%;
+            left: 10%;
+            animation-delay: -1s;
+        }
+
+        .floating-element:nth-child(2) {
+            width: 40px;
+            height: 40px;
+            top: 70%;
+            right: 10%;
+            animation-delay: -2s;
+        }
+
+        .floating-element:nth-child(3) {
+            width: 30px;
+            height: 30px;
+            bottom: 20%;
+            left: 20%;
+            animation-delay: -0.5s;
+        }
+
+        /* Pricing Section with Countdown */
+        .pricing-section {
+            padding: 100px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 20px;
+            margin-top: 50px;
+            backdrop-filter: blur(10px);
+        }
+
+        .pricing-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .pricing-header h2 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #1dd1a1, #55efc4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .pricing-header p {
+            font-size: 1.1rem;
+            color: #b8c6db;
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        .phases-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .phase-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            position: relative;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .phase-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .phase-card.current {
+            border-color: #00d4aa;
+            box-shadow: 0 0 30px rgba(0, 212, 170, 0.3);
+        }
+
+        .phase-card.completed {
+            border-color: #4CAF50;
+            opacity: 0.7;
+        }
+
+        .phase-card.upcoming {
+            border-color: #ff6b6b;
+        }
+
+        .phase-badge {
+            position: absolute;
+            top: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        .badge-current {
+            background: #00d4aa;
+            color: white;
+        }
+
+        .badge-completed {
+            background: #4CAF50;
+            color: white;
+        }
+
+        .badge-upcoming {
+            background: #ff6b6b;
+            color: white;
+        }
+
+        .phase-number {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            opacity: 0.8;
+        }
+
+        .phase-title {
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+        .phase-price {
+            font-size: 3rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .phase-1 .phase-price { color: #00d4aa; }
+        .phase-2 .phase-price { color: #7b68ee; }
+        .phase-3 .phase-price { color: #4169e1; }
+        .phase-4 .phase-price { color: #ffa500; }
+
+        .countdown-timer {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .countdown-title {
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+            opacity: 0.9;
+        }
+
+        .countdown-display {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .time-unit {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 15px 5px;
+            text-align: center;
+        }
+
+        .time-number {
+            font-size: 1.8rem;
+            font-weight: bold;
+            display: block;
+        }
+
+        .time-label {
+            font-size: 0.8rem;
+            opacity: 0.8;
+            margin-top: 5px;
+        }
+
+        .phase-features {
+            list-style: none;
+            text-align: left;
+            margin-top: 20px;
+        }
+
+        .phase-features li {
+            margin: 8px 0;
+            padding-left: 25px;
+            position: relative;
+        }
+
+        .phase-features li::before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #00d4aa;
+            font-weight: bold;
+        }
+
+        .status-message {
+            margin-top: 15px;
+            padding: 10px;
+            border-radius: 10px;
+            font-weight: bold;
+        }
+
+        .status-completed {
+            background: rgba(76, 175, 80, 0.2);
+            color: #4CAF50;
+        }
+
+        .status-active {
+            background: rgba(0, 212, 170, 0.2);
+            color: #00d4aa;
+        }
+
+        .status-upcoming {
+            background: rgba(255, 107, 107, 0.2);
+            color: #ff6b6b;
+        }
+
+        /* Buy Button Section */
+        .buy-section {
+            padding: 60px 20px;
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .buy-section h3 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #1dd1a1, #55efc4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .buy-section p {
+            font-size: 1.1rem;
+            color: #b8c6db;
+            margin-bottom: 40px;
+            line-height: 1.6;
+        }
+
+        .buy-button {
+            background: linear-gradient(135deg, #1dd1a1, #10ac84);
+            color: white;
+            padding: 20px 50px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .buy-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .buy-button:hover::before {
+            left: 100%;
+        }
+
+        .buy-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 35px rgba(29, 209, 161, 0.4);
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+
+        /* Background Animation */
+        .bg-animation {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: -1;
+        }
+
+        .bg-circle {
+            position: absolute;
+            border-radius: 50%;
+            background: linear-gradient(135deg, rgba(29, 209, 161, 0.1), rgba(85, 239, 196, 0.05));
+            animation: bgFloat 8s ease-in-out infinite;
+        }
+
+        .bg-circle:nth-child(1) {
+            width: 300px;
+            height: 300px;
+            top: 10%;
+            left: -10%;
+            animation-delay: 0s;
+        }
+
+        .bg-circle:nth-child(2) {
+            width: 200px;
+            height: 200px;
+            top: 60%;
+            right: -5%;
+            animation-delay: -3s;
+        }
+
+        .bg-circle:nth-child(3) {
+            width: 150px;
+            height: 150px;
+            bottom: 20%;
+            left: 50%;
+            animation-delay: -6s;
+        }
+
+        @keyframes bgFloat {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            25% { transform: translate(20px, -20px) rotate(90deg); }
+            50% { transform: translate(-20px, 20px) rotate(180deg); }
+            75% { transform: translate(20px, 20px) rotate(270deg); }
+        }
+
+        #logo-IMG{
+            position:relative;
+            top: 40px;
+            width: 400px;
+        }
+
+        #first-logo{
+            position: relative;
+            top: 5px;
+        }
+
+        #text-tether{
+            position: relative;
+            left:20px;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            #logo-IMG {
+                top: 20px;
+                width: 180px;
+            }
+            
+            .tether-logo {
+                margin-top: 20px;
+            }
+            
+            .nav-menu {
+                display: none;
+            }
+
+            .hero-section {
+                grid-template-columns: 1fr;
+                gap: 40px;
+                text-align: center;
+                padding: 40px 20px;
+            }
+
+            .hero-content h1 {
+                font-size: 2.5rem;
+            }
+
+            .tether-logo {
+                width: 200px;
+                height: 200px;
+            }
+
+            .tether-symbol {
+                font-size: 5rem;
+            }
+
+            .social-icons {
+                display: none;
+            }
+
+            .pricing-section {
+                padding: 60px 20px;
+            }
+
+            .pricing-header h2 {
+                font-size: 2rem;
+            }
+
+            .phases-container {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .phase-price {
+                font-size: 2.5rem;
+            }
+
+            .countdown-display {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="nav-container">
+            <div class="logo">
+                <div class="logo-icon"><img src="images/logo.png" width="60px" height="50px" id="first-logo"></div>
+                <span id="text-tether">Tether Teaching</span>
+            </div>
+            
+            <nav>
+                <ul class="nav-menu">
+                    <li><a href="#" class="active">Home</a></li>
+                    <li><a href="#pricing">Pricing</a></li>
+                    <li><a href="#">Services</a></li>
+                    <li><a href="#">Gallery</a></li>
+                    <li><a href="#">Contact</a></li>
+                </ul>
+            </nav>
+            
+            <div class="social-icons">
+                <a href="#" title="Facebook"><i class="fab fa-facebook-f"></i></a>
+                <a href="#" title="Twitter"><i class="fab fa-twitter"></i></a>
+                <a href="#" title="Instagram"><i class="fab fa-instagram"></i></a>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div class="bg-animation">
+            <div class="bg-circle"></div>
+            <div class="bg-circle"></div>
+            <div class="bg-circle"></div>
+        </div>
+
+        <section class="hero-section">
+            <div class="hero-content">
+                <h1>Tether Teaching</h1>
+                
+                <p class="hero-description">
+                    Tether Teaching (USDT) "Tether Teaching (USDT) is a community-driven crypto education initiative designed to make stablecoin awareness fun and accessible TON Blockchain. USDT combines the stability concept of the popular Tether stablecoin with interactive learning experiences, gamified education, and real-world utility. Holders gain access to simplified crypto education modules, participate in knowledge-based challenges, and earn rewards for completing financial literacy milestones. With its commitment to demystifying stablecoins through entertainment and practical application, Tether Teaching transforms complex financial concepts into engaging adventures for crypto newcomers and enthusiasts alike."
+                </p>
+                
+                <div class="features-list">
+                    <h3>Key Features:</h3>
+                    <ul>
+                        <li><strong>Stability:</strong> Pegged 1:1 with USD</li>
+                        <li><strong>Security:</strong> Audited reserves, blockchain transparency</li>
+                        <li><strong>Speed:</strong> Near-instant transactions</li>
+                        <li><strong>DeFi Integration:</strong> Compatible with major DeFi platforms</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="hero-visual">
+                <div class="floating-elements">
+                    <div class="floating-element"></div>
+                    <div class="floating-element"></div>
+                    <div class="floating-element"></div>
+                </div>
+                
+                <div class="tether-logo">
+                    <div class="tether-symbol"><img id="logo-IMG" src="images/logo.png"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Token Sale Phases with Countdown -->
+        <section class="pricing-section" id="pricing">
+            <div class="pricing-header">
+                <h2>Token Sale Countdown</h2>
+                <p>Join our token sale and be part of the future of crypto education. Each phase offers unique opportunities with progressive pricing.</p>
+            </div>
+
+            <div class="phases-container">
+                <div class="phase-card phase-1" id="phase1">
+                    <div class="phase-badge badge-current">CURRENT PHASE</div>
+                    <div class="phase-number">Phase 1</div>
+                    <div class="phase-title">Early Bird Sale</div>
+                    <div class="phase-price">$0.25</div>
+                    
+                    <div class="countdown-timer">
+                        <div class="countdown-title">Time Remaining</div>
+                        <div class="countdown-display" id="countdown1">
+                            <div class="time-unit">
+                                <span class="time-number" id="days1">00</span>
+                                <div class="time-label">Days</div>
+                            </div>
+                            <div class="time-unit">
+                                <span class="time-number" id="hours1">00</span>
+                                <div class="time-label">Hours</div>
+                            </div>
+                            <div class="time-unit">
+                                <span class="time-number" id="minutes1">00</span>
+                                <div class="time-label">Minutes</div>
+                            </div>
+                            <div class="time-unit">
+                                <span class="time-number" id="seconds1">00</span>
+                                <div class="time-label">Seconds</div>
+                            </div>
+                        </div>
+                        <div class="status-message status-active" id="status1">Phase 1 is currently active!</div>
+                    </div>
+
+                    <ul class="phase-features">
+                        <li>Lowest price available</li>
+                        <li>Maximum savings opportunity</li>
+                        <li>Early access to platform</li>
+                        <li>VIP community access</li>
+                    </ul>
+                </div>
+
+                <div class="phase-card phase-2" id="phase2">
+                    <div class="phase-badge badge-upcoming">UPCOMING</div>
+                    <div class="phase-number">Phase 2</div>
+                    <div class="phase-title">Rapid Sale</div>
+                    <div class="phase-price">$0.35</div>
+                    
+                    <div class="countdown-timer">
+                        <div class="countdown-title">Starts In</div>
+                        <div class="countdown-display" id="countdown2">
+                            <div class="time-unit">
+                                <span class="time-number" id="days2">00</span>
+                                <div class="time-label">Days</div>
+                            </div>
+                            <div class="time-unit">
+                                <span class="time-number" id="hours2">00</span>
+                                <div class="time-label">Hours</div>
+                            </div>
+                            <div class="time-unit">
+                                <span class="time-number" id="minutes2">00</span>
+                                <div class="time-label">Minutes</div>
+                            </div>
+                            <div class="time-unit">
+                                <span class="time-number" id="seconds2">00</span>
+                                <div class="time-label">Seconds</div>
+                            </div>
+                        </div>
+                        <div class="status-message status-upcoming" id="status2">Coming Soon!</div>
+                    </div>
+
+                    <ul class="phase-features">
+                        <li>40% increase from Phase 1</li>
+                        <li>Priority support access</li>
+                        <li>Educational content preview</li>
+                        <li>Community voting rights</li>
+                    </ul>
+                </div>
+
+                <div class="phase-card phase-3" id="phase3">
+                    <div class="phase-badge badge-upcoming">UPCOMING</div>
+                    <div class="phase-number">Phase 3</div>
+                    <div class="phase-title">Extended Sale</div>
+                    <div class="phase-price">$0.50</div>
+                    
+                    <div class="countdown-timer">
+                        <div class="countdown-title">Starts In</div>
+                        <div class="countdown-display" id="countdown3">
+                            <div class="time-unit">
+                                <span class="time-number" id="days3">00</span>
+                                <div class="time-label">Days</div>
+                            </div>
+                            <div class="time-unit">
+                                <span class="time-number" id="hours3">00</span>
+                                <div class="time-label">Hours</div>
+                            </div>
+                            <div class="time-unit">
+                                <span class="time-number" id="minutes3">00</span>
+                                <div class="time-label">Minutes</div>
+                            </div>
+                            <div class="time-unit">
+                                <span class="time-number" id="seconds3">00</span>
+                                <div class="time-label">Seconds</div>
+                            </div>
+                        </div>
+                        <div class="status-message status-upcoming" id="status3">Coming Soon!</div>
+                    </div>
+
+                    <ul class="phase-features">
+                        <li>100% increase from Phase 1</li>
+                        <li>Standard platform access</li>
+                        <li>Learning module access</li>
+                        <li>Regular community updates</li>
+                    </ul>
+                </div>
+
+                <div class="phase-card phase-4" id="phase4">
+                    <div class="phase-badge badge-upcoming">FINAL PHASE</div>
+                    <div class="phase-number">Phase 4</div>
+                    <div class="phase-title">Final Sale</div>
+                    <div class="phase-price">$0.75</div>
+                    
+                    <div class="countdown-timer">
+                        <div class="countdown-title">Starts In</div>
+                        <div class="countdown-display" id="countdown4">
+                            <div class="time-unit">
+                                <span class="time-number" id="days4">00</span>
+                                <div class="time-label">Days</div>
+                            </div>
+                            <div class="time-unit">
+                                <span class="time-number" id="hours4">00</span>
+                                <div class="time-label">Hours</div>
+                            </div>
+                            <div class="time-unit">
+                                <span class="time-number" id="minutes4">00</span>
+                                <div class="time-label">Minutes</div>
+                            </div>
+                            <div class="time-unit">
+                                <span class="time-number" id="seconds4">00</span>
+                                <div class="time-label">Seconds</div>
+                            </div>
+                        </div>
+                        <div class="status-message status-upcoming" id="status4">Final Opportunity!</div>
+                    </div>
+
+                    <ul class="phase-features">
+                        <li>200% increase from Phase 1</li>
+                        <li>Last chance to buy</li>
+                        <li>Full platform access</li>
+                        <li>Complete learning suite</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Buy Button Section -->
+            <div class="buy-section">
+                <h3>Ready to Join Tether Teaching?</h3>
+                <p>Don't miss out on this opportunity to be part of the future of crypto education. Start your journey with us today!</p>
+                <a href="https://tetherteaching.github.io/payment-page/" class="buy-button">BUY USDT NOW</a>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // Define phase dates based on the provided schedule
+        const now = new Date();
+        const phases = {
+            1: {
+                start: now,
+                end: new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000) // 7 days from now
+            },
+            2: {
+                start: new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000), // 30 days from now
+                end: new Date(now.getTime() + 60 * 24 * 60 * 60 * 1000) // 60 days from now (30 day duration)
+            },
+            3: {
+                start: new Date(now.getTime() + 60 * 24 * 60 * 60 * 1000), // 60 days from now
+                end: new Date(now.getTime() + 90 * 24 * 60 * 60 * 1000) // 90 days from now (30 day duration)
+            },
+            4: {
+                start: new Date(now.getTime() + 90 * 24 * 60 * 60 * 1000), // 90 days from now
+                end: new Date(now.getTime() + 120 * 24 * 60 * 60 * 1000) // 120 days from now (30 day duration)
+            }
+        };
+
+        // Function to update all countdowns
+        function updateAllCountdowns() {
+            const now = new Date();
+            
+            // Determine current active phase
+            let activePhase = null;
+            for (const [phaseNum, phase] of Object.entries(phases)) {
+                if (now >= phase.start && now <= phase.end) {
+                    activePhase = phaseNum;
+                    break;
+                }
+            }
+            
+            // Update each phase's display
+            for (const [phaseNum, phase] of Object.entries(phases)) {
+                const phaseElement = document.getElementById(`phase${phaseNum}`);
+                const badgeElement = phaseElement.querySelector('.phase-badge');
+                const statusElement = document.getElementById(`status${phaseNum}`);
+                
+                if (phaseNum === activePhase) {
+                    // Current active phase
+                    phaseElement.classList.add('current');
+                    phaseElement.classList.remove('completed', 'upcoming');
+                    badgeElement.className = 'phase-badge badge-current';
+                    badgeElement.textContent = 'CURRENT PHASE';
+                    statusElement.className = 'status-message status-active';
+                    statusElement.textContent = 'Phase ' + phaseNum + ' is currently active!';
+                    updateCountdown(phaseNum, phase.end);
+                } 
+                else if (now < phase.start) {
+                    // Upcoming phase
+                    phaseElement.classList.add('upcoming');
+                    phaseElement.classList.remove('current', 'completed');
+                    badgeElement.className = 'phase-badge badge-upcoming';
+                    badgeElement.textContent = phaseNum === '4' ? 'FINAL PHASE' : 'UPCOMING';
+                    statusElement.className = 'status-message status-upcoming';
+                    statusElement.textContent = phaseNum === '4' ? 'Final Opportunity!' : 'Coming Soon!';
+                    updateCountdown(phaseNum, phase.start);
+                } 
+                else {
+                    // Completed phase
+                    phaseElement.classList.add('completed');
+                    phaseElement.classList.remove('current', 'upcoming');
+                    badgeElement.className = 'phase-badge badge-completed';
+                    badgeElement.textContent = 'COMPLETED';
+                    statusElement.className = 'status-message status-completed';
+                    statusElement.textContent = 'Phase ' + phaseNum + ' has ended';
+                    document.getElementById(`days${phaseNum}`).textContent = '00';
+                    document.getElementById(`hours${phaseNum}`).textContent = '00';
+                    document.getElementById(`minutes${phaseNum}`).textContent = '00';
+                    document.getElementById(`seconds${phaseNum}`).textContent = '00';
+                }
+            }
+        }
+
+        function updateCountdown(phaseNumber, targetDate) {
+            const now = new Date().getTime();
+            const target = targetDate.getTime();
+            const difference = target - now;
+
+            if (difference <= 0) {
+                // Time has passed
+                document.getElementById(`days${phaseNumber}`).textContent = '00';
+                document.getElementById(`hours${phaseNumber}`).textContent = '00';
+                document.getElementById(`minutes${phaseNumber}`).textContent = '00';
+                document.getElementById(`seconds${phaseNumber}`).textContent = '00';
+                return;
+            }
+
+            const days = Math.floor(difference / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((difference % (1000 * 60)) / 1000);
+
+            // Update display
+            document.getElementById(`days${phaseNumber}`).textContent = days.toString().padStart(2, '0');
+            document.getElementById(`hours${phaseNumber}`).textContent = hours.toString().padStart(2, '0');
+            document.getElementById(`minutes${phaseNumber}`).textContent = minutes.toString().padStart(2, '0');
+            document.getElementById(`seconds${phaseNumber}`).textContent = seconds.toString().padStart(2, '0');
+        }
+
+        // Initialize countdowns and update every second
+        updateAllCountdowns();
+        setInterval(updateAllCountdowns, 1000);
+    </script>
+</body>
+</html>
