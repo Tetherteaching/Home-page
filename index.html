@@ -559,16 +559,19 @@
             75% { transform: translate(20px, 20px) rotate(270deg); }
         }
 
-        #logo-IMG{
-            position:relative;
-            top: 40px;
-            width: 400px;
-        }
+       #logo-IMG {
+    width: 100%;
+    max-width: 300px;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+}
 
-        #first-logo{
-            position: relative;
-            top: 5px;
-        }
+
+       #first-logo {
+    width: 40px;
+    height: auto;
+}
 
         #text-tether{
             position: relative;
@@ -577,14 +580,19 @@
 
         /* Responsive Design */
         @media (max-width: 768px) {
-            #logo-IMG {
-                top: 20px;
-                width: 180px;
-            }
-            
-            .tether-logo {
-                margin-top: 20px;
-            }
+           #logo-IMG {
+        max-width: 200px;
+        margin-top: 20px;
+    }
+           .tether-logo {
+        width: 220px;
+        height: 220px;
+        margin-top: 20px;
+    }
+            .hero-visual {
+        order: -1; /* This will move the visual above the text on mobile */
+        margin-bottom: 30px;
+    }
             
             .nav-menu {
                 display: none;
