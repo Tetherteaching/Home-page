@@ -878,111 +878,388 @@
     </main>
 
     <script>
-        // Define phase dates based on the provided schedule
-        const now = new Date();
+      // Function to initialize or retrieve phase timestamps
+function getPhaseTimestamps() {
+    const now = new Date();
+    const storedPhases = localStorage.getItem('tetherTeachingPhases');
+    
+    if (storedPhases) {
+        // Parse stored phases and convert string dates back to Date objects
+        const parsedPhases = JSON.parse(storedPhases);
+        for (const phase in parsedPhases) {
+            parsedPhases[phase].start = new Date(parsedPhases[phase].start);
+            parsedPhases[phase].end = new Date(parsedPhases[phase].end);
+        }
+        return parsedPhases;
+    } else {
+        // Create new phase timestamps (same as your original)
         const phases = {
             1: {
                 start: now,
-                end: new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000) // 7 days from now
+                end: new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000) // 7 days
             },
             2: {
-                start: new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000), // 30 days from now
-                end: new Date(now.getTime() + 60 * 24 * 60 * 60 * 1000) // 60 days from now (30 day duration)
+                start: new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000), // 30 days
+                end: new Date(now.getTime() + 60 * 24 * 60 * 60 * 1000) // 60 days
             },
             3: {
-                start: new Date(now.getTime() + 60 * 24 * 60 * 60 * 1000), // 60 days from now
-                end: new Date(now.getTime() + 90 * 24 * 60 * 60 * 1000) // 90 days from now (30 day duration)
+                start: new Date(now.getTime() + 60 * 24 * 60 * 60 * 1000), // 60 days
+                end: new Date(now.getTime() + 90 * 24 * 60 * 60 * 1000) // 90 days
             },
             4: {
-                start: new Date(now.getTime() + 90 * 24 * 60 * 60 * 1000), // 90 days from now
-                end: new Date(now.getTime() + 120 * 24 * 60 * 60 * 1000) // 120 days from now (30 day duration)
+                start: new Date(now.getTime() + 90 * 24 * 60 * 60 * 1000), // 90 days
+                end: new Date(now.getTime() + 120 * 24 * 60 * 60 * 1000) // 120 days
             }
         };
+        
+        // Store in localStorage (convert Dates to strings)
+        const phasesToStore = JSON.parse(JSON.stringify(phases));
+        localStorage.setItem('tetherTeachingPhases', JSON.stringify(phasesToStore));
+        return phases;
+    }
+}
 
-        // Function to update all countdowns
-        function updateAllCountdowns() {
-            const now = new Date();
-            
-            // Determine current active phase
-            let activePhase = null;
-            for (const [phaseNum, phase] of Object.entries(phases)) {
-                if (now >= phase.start && now <= phase.end) {
-                    activePhase = phaseNum;
-                    break;
-                }
-            }
-            
-            // Update each phase's display
-            for (const [phaseNum, phase] of Object.entries(phases)) {
-                const phaseElement = document.getElementById(`phase${phaseNum}`);
-                const badgeElement = phaseElement.querySelector('.phase-badge');
-                const statusElement = document.getElementById(`status${phaseNum}`);
-                
-                if (phaseNum === activePhase) {
-                    // Current active phase
-                    phaseElement.classList.add('current');
-                    phaseElement.classList.remove('completed', 'upcoming');
-                    badgeElement.className = 'phase-badge badge-current';
-                    badgeElement.textContent = 'CURRENT PHASE';
-                    statusElement.className = 'status-message status-active';
-                    statusElement.textContent = 'Phase ' + phaseNum + ' is currently active!';
-                    updateCountdown(phaseNum, phase.end);
-                } 
-                else if (now < phase.start) {
-                    // Upcoming phase
-                    phaseElement.classList.add('upcoming');
-                    phaseElement.classList.remove('current', 'completed');
-                    badgeElement.className = 'phase-badge badge-upcoming';
-                    badgeElement.textContent = phaseNum === '4' ? 'FINAL PHASE' : 'UPCOMING';
-                    statusElement.className = 'status-message status-upcoming';
-                    statusElement.textContent = phaseNum === '4' ? 'Final Opportunity!' : 'Coming Soon!';
-                    updateCountdown(phaseNum, phase.start);
-                } 
-                else {
-                    // Completed phase
-                    phaseElement.classList.add('completed');
-                    phaseElement.classList.remove('current', 'upcoming');
-                    badgeElement.className = 'phase-badge badge-completed';
-                    badgeElement.textContent = 'COMPLETED';
-                    statusElement.className = 'status-message status-completed';
-                    statusElement.textContent = 'Phase ' + phaseNum + ' has ended';
-                    document.getElementById(`days${phaseNum}`).textContent = '00';
-                    document.getElementById(`hours${phaseNum}`).textContent = '00';
-                    document.getElementById(`minutes${phaseNum}`).textContent = '00';
-                    document.getElementById(`seconds${phaseNum}`).textContent = '00';
-                }
-            }
+// Get or initialize phases
+const phases = getPhaseTimestamps();
+
+// Rest of your existing countdown code remains the same
+function updateAllCountdowns() {
+    const now = new Date();
+    
+    // Determine current active phase
+    let activePhase = null;
+    for (const [phaseNum, phase] of Object.entries(phases)) {
+        if (now >= phase.start && now <= phase.end) {
+            activePhase = phaseNum;
+            break;
         }
-
-        function updateCountdown(phaseNumber, targetDate) {
-            const now = new Date().getTime();
-            const target = targetDate.getTime();
-            const difference = target - now;
-
-            if (difference <= 0) {
-                // Time has passed
-                document.getElementById(`days${phaseNumber}`).textContent = '00';
-                document.getElementById(`hours${phaseNumber}`).textContent = '00';
-                document.getElementById(`minutes${phaseNumber}`).textContent = '00';
-                document.getElementById(`seconds${phaseNumber}`).textContent = '00';
-                return;
-            }
-
-            const days = Math.floor(difference / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((difference % (1000 * 60)) / 1000);
-
-            // Update display
-            document.getElementById(`days${phaseNumber}`).textContent = days.toString().padStart(2, '0');
-            document.getElementById(`hours${phaseNumber}`).textContent = hours.toString().padStart(2, '0');
-            document.getElementById(`minutes${phaseNumber}`).textContent = minutes.toString().padStart(2, '0');
-            document.getElementById(`seconds${phaseNumber}`).textContent = seconds.toString().padStart(2, '0');
+    }
+    
+    // Update each phase's display
+    for (const [phaseNum, phase] of Object.entries(phases)) {
+        const phaseElement = document.getElementById(`phase${phaseNum}`);
+        const badgeElement = phaseElement.querySelector('.phase-badge');
+        const statusElement = document.getElementById(`status${phaseNum}`);
+        
+        if (phaseNum === activePhase) {
+            // Current active phase
+            phaseElement.classList.add('current');
+            phaseElement.classList.remove('completed', 'upcoming');
+            badgeElement.className = 'phase-badge badge-current';
+            badgeElement.textContent = 'CURRENT PHASE';
+            statusElement.className = 'status-message status-active';
+            statusElement.textContent = 'Phase ' + phaseNum + ' is currently active!';
+            updateCountdown(phaseNum, phase.end);
+        } 
+        else if (now < phase.start) {
+            // Upcoming phase
+            phaseElement.classList.add('upcoming');
+            phaseElement.classList.remove('current', 'completed');
+            badgeElement.className = 'phase-badge badge-upcoming';
+            badgeElement.textContent = phaseNum === '4' ? 'FINAL PHASE' : 'UPCOMING';
+            statusElement.className = 'status-message status-upcoming';
+            statusElement.textContent = phaseNum === '4' ? 'Final Opportunity!' : 'Coming Soon!';
+            updateCountdown(phaseNum, phase.start);
+        } 
+        else {
+            // Completed phase
+            phaseElement.classList.add('completed');
+            phaseElement.classList.remove('current', 'upcoming');
+            badgeElement.className = 'phase-badge badge-completed';
+            badgeElement.textContent = 'COMPLETED';
+            statusElement.className = 'status-message status-completed';
+            statusElement.textContent = 'Phase ' + phaseNum + ' has ended';
+            document.getElementById(`days${phaseNum}`).textContent = '00';
+            document.getElementById(`hours${phaseNum}`).textContent = '00';
+            document.getElementById(`minutes${phaseNum}`).textContent = '00';
+            document.getElementById(`seconds${phaseNum}`).textContent = '00';
         }
+    }
+}
 
-        // Initialize countdowns and update every second
-        updateAllCountdowns();
-        setInterval(updateAllCountdowns, 1000);
+function updateCountdown(phaseNumber, targetDate) {
+    const now = new Date().getTime();
+    const target = targetDate.getTime();
+    const difference = target - now;
+
+    if (difference <= 0) {
+        // Time has passed
+        document.getElementById(`days${phaseNumber}`).textContent = '00';
+        document.getElementById(`hours${phaseNumber}`).textContent = '00';
+        document.getElementById(`minutes${phaseNumber}`).textContent = '00';
+        document.getElementById(`seconds${phaseNumber}`).textContent = '00';
+        return;
+    }
+
+    const days = Math.floor(difference / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((difference % (1000 * 60)) / 1000);
+
+    // Update display
+    document.getElementById(`days${phaseNumber}`).textContent = days.toString().padStart(2, '0');
+    document.getElementById(`hours${phaseNumber}`).textContent = hours.toString().padStart(2, '0');
+    document.getElementById(`minutes${phaseNumber}`).textContent = minutes.toString().padStart(2, '0');
+    document.getElementById(`seconds${phaseNumber}`).textContent = seconds.toString().padStart(2, '0');
+}
+
+// Initialize countdowns and update every second
+updateAllCountdowns();
+setInterval(updateAllCountdowns, 1000);// Function to initialize or retrieve phase timestamps
+function getPhaseTimestamps() {
+    const now = new Date();
+    const storedPhases = localStorage.getItem('tetherTeachingPhases');
+    
+    if (storedPhases) {
+        // Parse stored phases and convert string dates back to Date objects
+        const parsedPhases = JSON.parse(storedPhases);
+        for (const phase in parsedPhases) {
+            parsedPhases[phase].start = new Date(parsedPhases[phase].start);
+            parsedPhases[phase].end = new Date(parsedPhases[phase].end);
+        }
+        return parsedPhases;
+    } else {
+        // Create new phase timestamps (same as your original)
+        const phases = {
+            1: {
+                start: now,
+                end: new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000) // 7 days
+            },
+            2: {
+                start: new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000), // 30 days
+                end: new Date(now.getTime() + 60 * 24 * 60 * 60 * 1000) // 60 days
+            },
+            3: {
+                start: new Date(now.getTime() + 60 * 24 * 60 * 60 * 1000), // 60 days
+                end: new Date(now.getTime() + 90 * 24 * 60 * 60 * 1000) // 90 days
+            },
+            4: {
+                start: new Date(now.getTime() + 90 * 24 * 60 * 60 * 1000), // 90 days
+                end: new Date(now.getTime() + 120 * 24 * 60 * 60 * 1000) // 120 days
+            }
+        };
+        
+        // Store in localStorage (convert Dates to strings)
+        const phasesToStore = JSON.parse(JSON.stringify(phases));
+        localStorage.setItem('tetherTeachingPhases', JSON.stringify(phasesToStore));
+        return phases;
+    }
+}
+
+// Get or initialize phases
+const phases = getPhaseTimestamps();
+
+// Rest of your existing countdown code remains the same
+function updateAllCountdowns() {
+    const now = new Date();
+    
+    // Determine current active phase
+    let activePhase = null;
+    for (const [phaseNum, phase] of Object.entries(phases)) {
+        if (now >= phase.start && now <= phase.end) {
+            activePhase = phaseNum;
+            break;
+        }
+    }
+    
+    // Update each phase's display
+    for (const [phaseNum, phase] of Object.entries(phases)) {
+        const phaseElement = document.getElementById(`phase${phaseNum}`);
+        const badgeElement = phaseElement.querySelector('.phase-badge');
+        const statusElement = document.getElementById(`status${phaseNum}`);
+        
+        if (phaseNum === activePhase) {
+            // Current active phase
+            phaseElement.classList.add('current');
+            phaseElement.classList.remove('completed', 'upcoming');
+            badgeElement.className = 'phase-badge badge-current';
+            badgeElement.textContent = 'CURRENT PHASE';
+            statusElement.className = 'status-message status-active';
+            statusElement.textContent = 'Phase ' + phaseNum + ' is currently active!';
+            updateCountdown(phaseNum, phase.end);
+        } 
+        else if (now < phase.start) {
+            // Upcoming phase
+            phaseElement.classList.add('upcoming');
+            phaseElement.classList.remove('current', 'completed');
+            badgeElement.className = 'phase-badge badge-upcoming';
+            badgeElement.textContent = phaseNum === '4' ? 'FINAL PHASE' : 'UPCOMING';
+            statusElement.className = 'status-message status-upcoming';
+            statusElement.textContent = phaseNum === '4' ? 'Final Opportunity!' : 'Coming Soon!';
+            updateCountdown(phaseNum, phase.start);
+        } 
+        else {
+            // Completed phase
+            phaseElement.classList.add('completed');
+            phaseElement.classList.remove('current', 'upcoming');
+            badgeElement.className = 'phase-badge badge-completed';
+            badgeElement.textContent = 'COMPLETED';
+            statusElement.className = 'status-message status-completed';
+            statusElement.textContent = 'Phase ' + phaseNum + ' has ended';
+            document.getElementById(`days${phaseNum}`).textContent = '00';
+            document.getElementById(`hours${phaseNum}`).textContent = '00';
+            document.getElementById(`minutes${phaseNum}`).textContent = '00';
+            document.getElementById(`seconds${phaseNum}`).textContent = '00';
+        }
+    }
+}
+
+function updateCountdown(phaseNumber, targetDate) {
+    const now = new Date().getTime();
+    const target = targetDate.getTime();
+    const difference = target - now;
+
+    if (difference <= 0) {
+        // Time has passed
+        document.getElementById(`days${phaseNumber}`).textContent = '00';
+        document.getElementById(`hours${phaseNumber}`).textContent = '00';
+        document.getElementById(`minutes${phaseNumber}`).textContent = '00';
+        document.getElementById(`seconds${phaseNumber}`).textContent = '00';
+        return;
+    }
+
+    const days = Math.floor(difference / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((difference % (1000 * 60)) / 1000);
+
+    // Update display
+    document.getElementById(`days${phaseNumber}`).textContent = days.toString().padStart(2, '0');
+    document.getElementById(`hours${phaseNumber}`).textContent = hours.toString().padStart(2, '0');
+    document.getElementById(`minutes${phaseNumber}`).textContent = minutes.toString().padStart(2, '0');
+    document.getElementById(`seconds${phaseNumber}`).textContent = seconds.toString().padStart(2, '0');
+}
+
+// Initialize countdowns and update every second
+updateAllCountdowns();
+setInterval(updateAllCountdowns, 1000);// Function to initialize or retrieve phase timestamps
+function getPhaseTimestamps() {
+    const now = new Date();
+    const storedPhases = localStorage.getItem('tetherTeachingPhases');
+    
+    if (storedPhases) {
+        // Parse stored phases and convert string dates back to Date objects
+        const parsedPhases = JSON.parse(storedPhases);
+        for (const phase in parsedPhases) {
+            parsedPhases[phase].start = new Date(parsedPhases[phase].start);
+            parsedPhases[phase].end = new Date(parsedPhases[phase].end);
+        }
+        return parsedPhases;
+    } else {
+        // Create new phase timestamps (same as your original)
+        const phases = {
+            1: {
+                start: now,
+                end: new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000) // 7 days
+            },
+            2: {
+                start: new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000), // 30 days
+                end: new Date(now.getTime() + 60 * 24 * 60 * 60 * 1000) // 60 days
+            },
+            3: {
+                start: new Date(now.getTime() + 60 * 24 * 60 * 60 * 1000), // 60 days
+                end: new Date(now.getTime() + 90 * 24 * 60 * 60 * 1000) // 90 days
+            },
+            4: {
+                start: new Date(now.getTime() + 90 * 24 * 60 * 60 * 1000), // 90 days
+                end: new Date(now.getTime() + 120 * 24 * 60 * 60 * 1000) // 120 days
+            }
+        };
+        
+        // Store in localStorage (convert Dates to strings)
+        const phasesToStore = JSON.parse(JSON.stringify(phases));
+        localStorage.setItem('tetherTeachingPhases', JSON.stringify(phasesToStore));
+        return phases;
+    }
+}
+
+// Get or initialize phases
+const phases = getPhaseTimestamps();
+
+// Rest of your existing countdown code remains the same
+function updateAllCountdowns() {
+    const now = new Date();
+    
+    // Determine current active phase
+    let activePhase = null;
+    for (const [phaseNum, phase] of Object.entries(phases)) {
+        if (now >= phase.start && now <= phase.end) {
+            activePhase = phaseNum;
+            break;
+        }
+    }
+    
+    // Update each phase's display
+    for (const [phaseNum, phase] of Object.entries(phases)) {
+        const phaseElement = document.getElementById(`phase${phaseNum}`);
+        const badgeElement = phaseElement.querySelector('.phase-badge');
+        const statusElement = document.getElementById(`status${phaseNum}`);
+        
+        if (phaseNum === activePhase) {
+            // Current active phase
+            phaseElement.classList.add('current');
+            phaseElement.classList.remove('completed', 'upcoming');
+            badgeElement.className = 'phase-badge badge-current';
+            badgeElement.textContent = 'CURRENT PHASE';
+            statusElement.className = 'status-message status-active';
+            statusElement.textContent = 'Phase ' + phaseNum + ' is currently active!';
+            updateCountdown(phaseNum, phase.end);
+        } 
+        else if (now < phase.start) {
+            // Upcoming phase
+            phaseElement.classList.add('upcoming');
+            phaseElement.classList.remove('current', 'completed');
+            badgeElement.className = 'phase-badge badge-upcoming';
+            badgeElement.textContent = phaseNum === '4' ? 'FINAL PHASE' : 'UPCOMING';
+            statusElement.className = 'status-message status-upcoming';
+            statusElement.textContent = phaseNum === '4' ? 'Final Opportunity!' : 'Coming Soon!';
+            updateCountdown(phaseNum, phase.start);
+        } 
+        else {
+            // Completed phase
+            phaseElement.classList.add('completed');
+            phaseElement.classList.remove('current', 'upcoming');
+            badgeElement.className = 'phase-badge badge-completed';
+            badgeElement.textContent = 'COMPLETED';
+            statusElement.className = 'status-message status-completed';
+            statusElement.textContent = 'Phase ' + phaseNum + ' has ended';
+            document.getElementById(`days${phaseNum}`).textContent = '00';
+            document.getElementById(`hours${phaseNum}`).textContent = '00';
+            document.getElementById(`minutes${phaseNum}`).textContent = '00';
+            document.getElementById(`seconds${phaseNum}`).textContent = '00';
+        }
+    }
+}
+
+function updateCountdown(phaseNumber, targetDate) {
+    const now = new Date().getTime();
+    const target = targetDate.getTime();
+    const difference = target - now;
+
+    if (difference <= 0) {
+        // Time has passed
+        document.getElementById(`days${phaseNumber}`).textContent = '00';
+        document.getElementById(`hours${phaseNumber}`).textContent = '00';
+        document.getElementById(`minutes${phaseNumber}`).textContent = '00';
+        document.getElementById(`seconds${phaseNumber}`).textContent = '00';
+        return;
+    }
+
+    const days = Math.floor(difference / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((difference % (1000 * 60)) / 1000);
+
+    // Update display
+    document.getElementById(`days${phaseNumber}`).textContent = days.toString().padStart(2, '0');
+    document.getElementById(`hours${phaseNumber}`).textContent = hours.toString().padStart(2, '0');
+    document.getElementById(`minutes${phaseNumber}`).textContent = minutes.toString().padStart(2, '0');
+    document.getElementById(`seconds${phaseNumber}`).textContent = seconds.toString().padStart(2, '0');
+}
+
+// Initialize countdowns and update every second
+updateAllCountdowns();
+setInterval(updateAllCountdowns, 1000);
     </script>
 </body>
 </html>
