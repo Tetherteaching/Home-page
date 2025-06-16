@@ -1236,14 +1236,14 @@ function updateCountdown(phaseNumber, targetDate) {
     const target = targetDate.getTime();
     const difference = target - now;
 
-    if (difference <= 0) {
-        // Time has passed
-        document.getElementById(`days${phaseNumber}`).textContent = '00';
-        document.getElementById(`hours${phaseNumber}`).textContent = '00';
-        document.getElementById(`minutes${phaseNumber}`).textContent = '00';
-        document.getElementById(`seconds${phaseNumber}`).textContent = '00';
-        return;
-    }
+    // if (difference <= 0) {
+    //     // Time has passed
+    //     document.getElementById(`days${phaseNumber}`).textContent = '00';
+    //     document.getElementById(`hours${phaseNumber}`).textContent = '00';
+    //     document.getElementById(`minutes${phaseNumber}`).textContent = '00';
+    //     document.getElementById(`seconds${phaseNumber}`).textContent = '00';
+    //     return;
+    // }
 
     const days = Math.floor(difference / (1000 * 60 * 60 * 24));
     const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
